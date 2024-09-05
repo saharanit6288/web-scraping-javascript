@@ -18,7 +18,7 @@ app.get('/', async (req, res) => {
     res.render('pages/index', data);
 });
 
-app.listen(1337, () => {
-    console.log('server is running');
-});
+const PORT = process.env.PORT || 1337;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
