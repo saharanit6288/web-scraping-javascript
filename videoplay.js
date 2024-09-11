@@ -5,7 +5,7 @@ const moment = require('moment');
 let iframeUrl = '';
 
 async function scrapeSite() {
-	const url = `https://jhanakk.com/taarak-mehta-ka-ooltah-chashmah1/`;
+	const url = `https://jhanakk.com/?s=taarak`;
 	const { data } = await axios.get(url);
 	const $ = cheerio.load(data);
 	const results = [];
@@ -13,6 +13,7 @@ async function scrapeSite() {
 		const videoFileUrl = $(elem).find('a').attr('href');
 		const title = $(elem).find('h2.post-box-title').text();
 		results.push({ title, videoFileUrl });
+        //console.log(results);
 	});
 
     let todayDate = moment().format("Do MMMM YYYY");
