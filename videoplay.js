@@ -17,16 +17,25 @@ async function scrapeSite() {
 	});
 
     let todayDate = moment().format("Do MMMM YYYY");
+    let dayNumber = moment().day(); // Sunday = 0 & Saturday = 6
+    let yesterdayDate = moment().subtract(1, "days").format("Do MMMM YYYY");
+    let currentVideoDate = dayNumber == 0 ? yesterdayDate : todayDate;
+    //console.log('today yesterday daynumber current', todayDate, yesterdayDate, dayNumber, currentVideoDate);
 
     const todayVideoItem = results.filter((item) => {
-        return item.title.includes(todayDate);
+        return item.title.includes(currentVideoDate);
     });
-
 
     await getSingleItem(todayVideoItem[0].videoFileUrl)
         .then(result => {
             const $ = cheerio.load(result);
-            iframeUrl = $('div.single-post-video > iframe').attr('src');
+            //iframeUrl = $('div.single-post-video > iframe').attr('src');
+            let items = [...$("div.single-post-video iframe")].map(elem =>
+                $(elem).attr('src')
+            );
+            iframeUrl = items.find((item) => {
+                return item.includes('vkspeed');
+            });
             //console.log('iframe url----', iframeUrl);
         })
         .catch(err => console.log(err));
